@@ -1,6 +1,5 @@
 # Bootcamp 2 REST API
 
-# Project Instructions
 - Clone the repo
 - cd to cloned repo
 - run `npm install` to install project dependencies
