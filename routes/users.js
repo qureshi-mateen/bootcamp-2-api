@@ -45,12 +45,11 @@ router.get('/', function(req, res, next) {
 
 router.post('/', async function(req, res, next) {
   const data = req.body;
-  // users.push(data);
   try {
-    await UsersController.addUser(data);
+    const user = await UsersController.addUser(data);
     res.status(200).send({
       message: 'Successfully saved user',
-      data: users
+      data: user
     });
   } catch (error) {
     res.status(500).send({
