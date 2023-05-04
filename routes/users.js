@@ -2,47 +2,24 @@ var express = require('express');
 var router = express.Router();
 const { UsersController } = require('../controllers'); 
 
-const users = [
-  {
-    name: 'XYZ',
-    age: 24,
-    username: 'user_name_1',
-    password: 'abc123'
-  },
-  {
-    name: 'ABC',
-    age: 27,
-    username: 'user_name_2',
-    password: 'abc123'
-  },
-  {
-    name: 'EFG',
-    age: 30,
-    username: 'user_name_3',
-    password: 'abc123'
-  },
-  {
-    name: 'HIK',
-    age: 22,
-    username: 'user_name_4',
-    password: 'abc123'
-  },
-  {
-    name: 'LMN',
-    age: 32,
-    username: 'user_name_5',
-    password: 'abc123'
-  }
-];
-
 /* GET users listing. */
-router.get('/', function(req, res, next) {
-  res.send({
-    message: 'Successfully fetched users',
-    data: users
-  });
+router.get('/', async function(req, res, next) {
+  const filter = req.query;
+  try {
+    const results = await UsersController.getAllUsers(filter);
+    return res.status(200).send({
+      message: 'Successfully fetched users',
+      data: results
+    });
+  } catch (error) {
+    res.status(500).send({
+      message: 'Something went wrong',
+      data: error
+    });
+  }
 });
 
+/* ADD user. */
 router.post('/', async function(req, res, next) {
   const data = req.body;
   try {
@@ -59,20 +36,22 @@ router.post('/', async function(req, res, next) {
   }
 });
 
-router.put('/:id', function(req, res, next) {
+/* UPDATE user. */
+router.put('/:id', async function(req, res, next) {
   const id = req.params.id;
   const data = req.body;
-  if (!users[id]) {
-    return res.send({
-      message: 'The id is invalid',
-      data: null
+  try {
+    const result = await UsersController.updateUser(id, data);
+    return res.status(200).send({
+      message: 'Successfully fetched users',
+      data: result
+    });
+  } catch (error) {
+    res.status(500).send({
+      message: 'Something went wrong',
+      data: error
     });
   }
-  users[id] = data;
-  res.send({
-    message: 'Successfully updated user',
-    data: users
-  });
 });
 
 router.delete('/:id', function(req, res, next) {
@@ -80,7 +59,7 @@ router.delete('/:id', function(req, res, next) {
   users.splice(id, 1);
   res.send({
     message: 'Successfully deleted user',
-    data: users
+    data: {}
   });
 });
 
