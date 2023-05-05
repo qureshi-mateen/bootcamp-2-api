@@ -87,4 +87,39 @@ router.delete('/:id', async (req, res, next) => {
   }
 });
 
+/* LOGIN user. */
+router.post('/login', async (req, res, next) => {
+  const { username, password } = req.body;
+  if (!username) {
+    return res.status(400).send({
+      message: 'Username is required',
+      data: null
+    });
+  }
+  if (!password) {
+    return res.status(400).send({
+      message: 'Password is required',
+      data: null
+    });
+  }
+  try {
+    const user = await UsersController.verifyUser({ username, password });
+    if (!user) {
+      return res.status(401).send({
+        message: 'Invalid credentials',
+        data: null
+      });
+    }
+    res.status(200).send({
+      message: 'Successfully loggedin user',
+      data: user
+    });
+  } catch (error) {
+    res.status(500).send({
+      message: 'Something went wrong',
+      data: error
+    });
+  }
+});
+
 module.exports = router;

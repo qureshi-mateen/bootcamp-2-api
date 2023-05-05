@@ -1,0 +1,3 @@
+- passport.js
+- passport-local
+- jwt (JSON Web Tokens)

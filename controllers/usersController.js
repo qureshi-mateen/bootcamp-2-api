@@ -21,10 +21,15 @@ const deleteUser = (id) => {
     return UsersModel.findByIdAndDelete(id, { new: true });
 };
 
+const verifyUser = (filter) => {
+    return UsersModel.findOne(filter).select(['_id', 'name', 'username', 'age', 'createdAt']);
+};
+
 module.exports = {
     addUser,
     getAllUsers,
     getUserById,
     updateUser,
-    deleteUser
+    deleteUser,
+    verifyUser
 }
