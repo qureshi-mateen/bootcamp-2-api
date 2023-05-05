@@ -17,9 +17,14 @@ const updateUser = (id, body) => {
     return UsersModel.findOneAndUpdate(query, body, { new: true });
 };
 
+const deleteUser = (id) => {
+    return UsersModel.findByIdAndDelete(id, { new: true });
+};
+
 module.exports = {
     addUser,
     getAllUsers,
     getUserById,
-    updateUser
+    updateUser,
+    deleteUser
 }

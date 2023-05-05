@@ -19,6 +19,23 @@ router.get('/', async function(req, res, next) {
   }
 });
 
+/* GET single user. */
+router.get('/:id', async function(req, res, next) {
+  const id = req.params.id;
+  try {
+    const result = await UsersController.getUserById(id);
+    return res.status(200).send({
+      message: 'Successfully fetched user',
+      data: result
+    });
+  } catch (error) {
+    res.status(500).send({
+      message: 'Something went wrong',
+      data: error
+    });
+  }
+});
+
 /* ADD user. */
 router.post('/', async function(req, res, next) {
   const data = req.body;
@@ -54,13 +71,20 @@ router.put('/:id', async function(req, res, next) {
   }
 });
 
-router.delete('/:id', function(req, res, next) {
+router.delete('/:id', async (req, res, next) => {
   const id = req.params.id;
-  users.splice(id, 1);
-  res.send({
-    message: 'Successfully deleted user',
-    data: {}
-  });
+  try {
+    const result = await UsersController.deleteUser(id);
+    return res.status(200).send({
+      message: 'Successfully deleted user',
+      data: result
+    });
+  } catch (error) {
+    res.status(500).send({
+      message: 'Something went wrong',
+      data: error
+    });
+  }
 });
 
 module.exports = router;
