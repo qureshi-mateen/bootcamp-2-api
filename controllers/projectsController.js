@@ -1,7 +1,16 @@
 const { ProjectsModel } = require('../models');
 
 const addProject = (body) => {
-    return ProjectsModel.create(body);
+    const doc = new ProjectsModel(body);
+    const query = { _id: doc._id };
+    return ProjectsModel.findOneAndUpdate(
+        query,
+        doc,
+        {
+            new: true,
+            upsert: true
+        }
+    ).populate('owner');
 };
 
 const getAllProjects = (filter) => {
