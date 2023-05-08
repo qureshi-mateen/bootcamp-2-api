@@ -53,14 +53,14 @@ router.post('/', async function(req, res, next) {
   }
 });
 
-/* UPDATE user. */
+/* UPDATE project. */
 router.put('/:id', async function(req, res, next) {
   const id = req.params.id;
   const data = req.body;
   try {
-    const result = await UsersController.updateUser(id, data);
+    const result = await ProjectsController.updateProject(id, data);
     return res.status(200).send({
-      message: 'Successfully fetched users',
+      message: 'Successfully updated project',
       data: result
     });
   } catch (error) {
@@ -74,45 +74,10 @@ router.put('/:id', async function(req, res, next) {
 router.delete('/:id', async (req, res, next) => {
   const id = req.params.id;
   try {
-    const result = await UsersController.deleteUser(id);
+    const result = await ProjectsController.deleteUser(id);
     return res.status(200).send({
-      message: 'Successfully deleted user',
+      message: 'Successfully deleted project',
       data: result
-    });
-  } catch (error) {
-    res.status(500).send({
-      message: 'Something went wrong',
-      data: error
-    });
-  }
-});
-
-/* LOGIN user. */
-router.post('/login', async (req, res, next) => {
-  const { username, password } = req.body;
-  if (!username) {
-    return res.status(400).send({
-      message: 'Username is required',
-      data: null
-    });
-  }
-  if (!password) {
-    return res.status(400).send({
-      message: 'Password is required',
-      data: null
-    });
-  }
-  try {
-    const user = await UsersController.verifyUser({ username, password });
-    if (!user) {
-      return res.status(401).send({
-        message: 'Invalid credentials',
-        data: null
-      });
-    }
-    res.status(200).send({
-      message: 'Successfully loggedin user',
-      data: user
     });
   } catch (error) {
     res.status(500).send({
