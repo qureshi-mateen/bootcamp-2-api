@@ -1,6 +1,9 @@
 var express = require('express');
 var router = express.Router();
-const { UsersController } = require('../controllers'); 
+const {
+  UsersController,
+  EmailsController
+} = require('../controllers'); 
 
 /* GET users listing. */
 router.get('/', async function(req, res, next) {
@@ -41,9 +44,14 @@ router.post('/', async function(req, res, next) {
   const data = req.body;
   try {
     const user = await UsersController.addUser(data);
+    const messageId = await EmailsController.sendEmail({
+      to: user.username,
+      subject: 'Account Activation',
+      html: '<h2>Welcome to our app. Your account has been activated</h2>'
+    })
     res.status(200).send({
       message: 'Successfully saved user',
-      data: user
+      data: { user, messageId }
     });
   } catch (error) {
     res.status(500).send({

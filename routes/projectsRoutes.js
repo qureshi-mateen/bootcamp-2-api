@@ -71,10 +71,34 @@ router.put('/:id', async function(req, res, next) {
   }
 });
 
+/* UPDATE project status. */
+router.put('/:id/change-status', async function(req, res, next) {
+  const id = req.params.id;
+  const { status } = req.body;
+  if (!status) {
+    return res.status(400).send({
+      message: 'Status is required',
+      data: null
+    });
+  }
+  try {
+    const result = await ProjectsController.updateProject(id, { status });
+    return res.status(200).send({
+      message: 'Successfully updated project status',
+      data: result
+    });
+  } catch (error) {
+    res.status(500).send({
+      message: 'Something went wrong',
+      data: error
+    });
+  }
+});
+
 router.delete('/:id', async (req, res, next) => {
   const id = req.params.id;
   try {
-    const result = await ProjectsController.deleteUser(id);
+    const result = await ProjectsController.deleteProject(id);
     return res.status(200).send({
       message: 'Successfully deleted project',
       data: result

@@ -10,7 +10,12 @@ const projectSchema = new mongoose.Schema({
             description: { type: String }
         }
     ],
-    owner: { type: mongoose.Types.ObjectId, ref: 'users', required: true }
+    owner: { type: mongoose.Types.ObjectId, ref: 'users', required: true },
+    status: {
+        type: String,
+        enum: ['pending', 'assigned', 'complete'],
+        default: 'pending'
+    }
 }, {
     timestamps: true,
     collection: 'projects',
